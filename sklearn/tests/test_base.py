@@ -321,7 +321,7 @@ def test_clone_estimator_types():
     # This should not raise an error
     cloned_estimator = clone(estimator)
     
-    # Verify the clone worked correctly
+    # Verify the clone worked correctly.
     assert estimator is not cloned_estimator
     assert estimator.estimator_param is cloned_estimator.estimator_param
     assert cloned_estimator.estimator_param is DummyEstimator
