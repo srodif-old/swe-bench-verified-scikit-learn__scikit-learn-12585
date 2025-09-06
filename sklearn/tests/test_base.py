@@ -306,6 +306,27 @@ def test_clone_pandas_dataframe():
     assert_equal(e.scalar_param, cloned_e.scalar_param)
 
 
+def test_clone_estimator_types():
+    # Tests cloning when parameters are estimator types (classes), not instances
+    # Regression test for issue where clone fails for parameters that are 
+    # estimator types
+    
+    class DummyEstimator(BaseEstimator):
+        def __init__(self, estimator_param=None):
+            self.estimator_param = estimator_param
+    
+    # Create an estimator with an estimator class as a parameter
+    estimator = DummyEstimator(estimator_param=DummyEstimator)
+    
+    # This should not raise an error
+    cloned_estimator = clone(estimator)
+    
+    # Verify the clone worked correctly.
+    assert estimator is not cloned_estimator
+    assert estimator.estimator_param is cloned_estimator.estimator_param
+    assert cloned_estimator.estimator_param is DummyEstimator
+
+
 def test_pickle_version_warning_is_not_raised_with_matching_version():
     iris = datasets.load_iris()
     tree = DecisionTreeClassifier().fit(iris.data, iris.target)
